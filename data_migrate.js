@@ -15,7 +15,9 @@ request('http://mock-api.smartermeasure.com/v4/results', function (err, response
             count('technical_knowledge');
             narrowSearch('Anthony');
             rangeSearch(987071190, 987071190);
-            facets();
+            statFacet();
+            agg();
+            Bucketagg();
     }
 });
 
@@ -123,7 +125,7 @@ function rangeSearch(dateOne, dateTwo) {
     });
 }
 //returns stats on the date_started like average date started
-function facets() {
+function statFacet() {
     client.search({
         index: 'myindex',
         body: {
@@ -139,7 +141,35 @@ function facets() {
             }
         }
     }, function (error, response) {
-        console.log(response.facets);
+        //console.log(response.facets);
+    });
+}
+function agg() {
+    client.search({
+        index: 'myindex',
+        body: {
+            aggs : {
+                first_date : { min : { field : "date_started" } }
+            }
+        }
+    }, function (error, response) {
+        //console.log(response.aggregations);
+    });
+}
+function Bucketagg() {
+    client.search({
+        index: 'myindex',
+        body: {
+            aggs : {
+                date_buckets : {
+                    percentiles : {
+                        field : "date_started"
+                    }
+                }
+            }
+        }
+    }, function (error, response) {
+        console.log(response.aggregations);
     });
 }
 
