@@ -8,7 +8,7 @@ request('http://mock-api.smartermeasure.com/v4/results', function (err, response
     } else {
             data = JSON.parse(body);
             //indexData(data);
-            basicSearch('Anthony');
+            basicSearch('first location');
             suggestSearch('Anthiny');
         //tokenizer types = standard, edgeNGram, keyword, letter, lowercase, nGram, whitespace, pattern, uax_url_email, path_hierarchy, classic
             searchAnalize('This is a new blahh', 'nGram');
@@ -18,6 +18,8 @@ request('http://mock-api.smartermeasure.com/v4/results', function (err, response
             statFacet();
             agg();
             Bucketagg();
+            addLocation();
+            geo();
     }
 });
 
@@ -25,7 +27,21 @@ var client = new elasticsearch.Client({
     host: 'https://VOCFRfp406LdFsRmlkhEwGI2zV57kHEi:@jordantest.east-us.azr.facetflow.io',
     apiVersion: '1.0'
 });
-/* Content already added
+
+function addLocation() {
+    client.index({
+        index: 'newlocations',
+        type: 'object',
+        body: {
+            name: "blhhhrrr",
+            location: { lat : 52.3760, lon : 4.894 }
+        }
+    }, function (error, response) {
+        console.log(response);
+    });
+}
+
+/*
 function indexData(data) {
     for (var i = 0; i < data.results.length; i++) {
         client.index({
@@ -53,7 +69,7 @@ function indexData(data) {
 //basic search
 function basicSearch(searchTerm) {
     client.search({
-        index: 'myindex',
+        index: 'locations',
         q: searchTerm
     }, function (error, response) {
         //console.log(response.hits.hits);
@@ -169,9 +185,33 @@ function Bucketagg() {
             }
         }
     }, function (error, response) {
-        console.log(response.aggregations);
+        //console.log(response.aggregations);
     });
 }
+
+function geo() {
+    client.search({
+        index: 'newlocations',
+        body: {
+            aggs : {
+                rings : {
+                    geo_distance : {
+                        field : "location",
+                        origin : { "lat" : 60, "lon" : 20 },
+                        unit : "mi",
+                        ranges : [
+                            { to : 1 }
+                        ]
+                    }
+                }
+            }
+        }
+    }, function (error, response) {
+
+        console.log(response.aggregations.rings);
+    });
+}
+
 
 
 
