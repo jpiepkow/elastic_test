@@ -14,7 +14,7 @@ request('http://mock-api.smartermeasure.com/v4/results', function (err, response
             searchAnalize('This is a new blahh', 'nGram');
             count('technical_knowledge');
             narrowSearch('Anthony');
-            rangeSearch('Anthony');
+            rangeSearch(987071190, 987071190);
     }
 });
 
@@ -100,17 +100,19 @@ function narrowSearch(searchTerm) {
         //console.log(response.hits.hits[0]);
     });
 }
-
-function rangeSearch(searchTerm) {
+//returns values between specified dates
+function rangeSearch(dateOne, dateTwo) {
     client.search({
         index: 'myindex',
         body: {
-
-            facets: {
-                histo1: {
-                    date_histogram: {
-                        key_field: 'date_started',
-                        interval : "day"
+            "query" : {
+                "match_all" : {}
+            },
+            filter : {
+                range : {
+                    date_started : {
+                        gte: 987071190,
+                        lte: 987071190
                     }
                 }
             }
