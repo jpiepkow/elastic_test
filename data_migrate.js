@@ -15,6 +15,7 @@ request('http://mock-api.smartermeasure.com/v4/results', function (err, response
             count('technical_knowledge');
             narrowSearch('Anthony');
             rangeSearch(987071190, 987071190);
+            facets();
     }
 });
 
@@ -111,14 +112,34 @@ function rangeSearch(dateOne, dateTwo) {
             filter : {
                 range : {
                     date_started : {
-                        gte: 987071190,
-                        lte: 987071190
+                        gte: dateOne,
+                        lte: dateTwo
                     }
                 }
             }
         }
     }, function (error, response) {
-        console.log(response.hits.hits);
+        //console.log(response.hits.hits);
+    });
+}
+//returns stats on the date_started like average date started
+function facets() {
+    client.search({
+        index: 'myindex',
+        body: {
+            "query" : {
+                "match_all" : {}
+            },
+            facets : {
+                stat1 : {
+                    statistical : {
+                        field : "date_started"
+                    }
+                }
+            }
+        }
+    }, function (error, response) {
+        console.log(response.facets);
     });
 }
 
