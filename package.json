@@ -1,0 +1,25 @@
+{
+  "name": "elastic_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "browser_elastic.js",
+  "dependencies": {
+    "elastic.js": "^1.2.0",
+    "elasticsearch": "^5.0.0",
+    "request": "^2.60.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jpiepkow/elastic_test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpiepkow/elastic_test/issues"
+  },
+  "homepage": "https://github.com/jpiepkow/elastic_test"
+}
